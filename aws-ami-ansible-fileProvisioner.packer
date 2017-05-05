@@ -1,0 +1,34 @@
+{
+	"builders": [
+		{
+			"type": "amazon-ebs",
+			"region": "us-west-2",
+			"source_ami": "ami-9abea4fb",
+			"instance_type": "t2.micro",
+			"ssh_username": "ubuntu",
+			"ami_name": "MiddleTier-{{isotime | clean_ami_name}}",
+			"ami_description": "AMI designed by Aditya Inapurapu",
+			"tags": {
+				"role": "MiddleTier"
+			},
+			"run_tags": {
+				"role": "buildSystem"
+			}
+		}
+	],
+	"provisioners": [
+		{
+			"type": "shell",
+			"script": "ansible.sh"
+		},
+		{
+			"type": "ansible-local",
+			"playbook_file": "ansible/playbook.yml"
+		},
+		{
+			"type": "file",
+			"source": "ToUpload/",
+			"destination": "/tmp"
+		}
+	]
+}
